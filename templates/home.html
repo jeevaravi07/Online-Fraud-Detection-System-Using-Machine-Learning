@@ -1,0 +1,428 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Modern Color Scheme & Variables */
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --secondary: #7c3aed;
+        --accent: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --gray: #64748b;
+        --gradient-1: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        --gradient-2: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    /* Clean Background */
+    body {
+        background: linear-gradient(to bottom right, #eff6ff 0%, #f3e8ff 100%);
+        position: relative;
+    }
+
+    /* Subtle Pattern Overlay */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+    }
+
+    /* Modern Card Design */
+    .card {
+        max-width: 900px;
+        margin: 60px auto;
+        background: white;
+        border-radius: 32px;
+        padding: 0;
+        box-shadow: var(--shadow-xl);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Header Gradient Bar */
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--gradient-1);
+    }
+
+    /* Card Inner Content */
+    .card-content {
+        padding: 48px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+        color: var(--primary);
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Main Heading */
+    .card h2 {
+        font-size: 3rem;
+        font-weight: 800;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+    }
+
+    /* Description Text */
+    .description {
+        font-size: 1.125rem;
+        line-height: 1.75;
+        color: var(--gray);
+        margin-bottom: 48px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 48px;
+        padding: 24px 0;
+        border-top: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .stat-card {
+        text-align: center;
+        padding: 16px;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        background: #f8fafc;
+        transform: scale(1.05);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        background: var(--gradient-1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 8px;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: var(--gray);
+        font-weight: 500;
+    }
+
+    /* Features Grid */
+    .features-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .card li {
+        padding: 24px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--dark);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .card li:hover {
+        border-color: var(--primary);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Feature Icons */
+    .feature-icon {
+        font-size: 2rem;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .feature-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+    }
+
+    .feature-desc {
+        font-size: 0.875rem;
+        color: var(--gray);
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    /* Remove default checkmark and add custom styling */
+    .card li::before {
+        display: none;
+    }
+
+    /* Custom content for list items */
+    .card li:nth-child(1) .feature-icon { content: '🎯'; }
+    .card li:nth-child(2) .feature-icon { content: '⚡'; }
+    .card li:nth-child(3) .feature-icon { content: '🛡️'; }
+
+    /* CTA Section */
+    .cta-section {
+        margin-top: 48px;
+        text-align: center;
+        padding-top: 32px;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: var(--gradient-1);
+        color: white;
+        padding: 14px 32px;
+        border-radius: 100px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+    }
+
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Floating Shapes */
+    .floating-shape {
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .shape-1 {
+        top: 10%;
+        left: 5%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 20s ease-in-out infinite;
+    }
+
+    .shape-2 {
+        bottom: 10%;
+        right: 5%;
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 15s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(5deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .card {
+            margin: 20px;
+            border-radius: 24px;
+        }
+
+        .card-content {
+            padding: 32px 24px;
+        }
+
+        .card h2 {
+            font-size: 2rem;
+        }
+
+        .description {
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card ul {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card li {
+            padding: 20px;
+        }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--gradient-1);
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--gradient-2);
+    }
+
+    /* Selection Color */
+    ::selection {
+        background: var(--primary);
+        color: white;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Loading Animation for List Items */
+    .card li {
+        animation: fadeInUp 0.5s ease-out backwards;
+    }
+
+    .card li:nth-child(1) { animation-delay: 0.1s; }
+    .card li:nth-child(2) { animation-delay: 0.2s; }
+    .card li:nth-child(3) { animation-delay: 0.3s; }
+</style>
+
+<div class="card">
+    <div class="card-content">
+        <div class="hero-section">
+            <div class="badge">🚀 AI-POWERED SECURITY</div>
+            <h2>Welcome to Fraud Detection System</h2>
+            <p class="description">
+                This system uses Machine Learning to detect fraudulent financial transactions in real-time.
+            </p>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Detection Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">&lt;100ms</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Real-time Monitoring</div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-title">✨ Key Features</div>
+        <ul>
+            <li>
+                <span class="feature-icon">🎯</span>
+                <div class="feature-title">High Accuracy Detection</div>
+                <div class="feature-desc">Advanced ML models with 99.9% accuracy in detecting fraudulent patterns</div>
+            </li>
+            <li>
+                <span class="feature-icon">⚡</span>
+                <div class="feature-title">Real-time Prediction</div>
+                <div class="feature-desc">Instant transaction analysis with sub-100ms response time</div>
+            </li>
+            <li>
+                <span class="feature-icon">🛡️</span>
+                <div class="feature-title">Secure & Reliable</div>
+                <div class="feature-desc">Bank-grade security with end-to-end encryption</div>
+            </li>
+        </ul>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <a href="/predict" class="cta-button">🔮 Start Prediction →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Floating Background Shapes -->
+<div class="floating-shape shape-1"></div>
+<div class="floating-shape shape-2"></div>
+
+{% endblock %}

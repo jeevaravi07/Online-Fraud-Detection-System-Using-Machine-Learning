@@ -1,0 +1,784 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Modern Color Scheme */
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --secondary: #7c3aed;
+        --accent: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --dark: #1e293b;
+        --light: #f8fafc;
+        --gray: #64748b;
+        --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    /* Card Container */
+    .card {
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease-out;
+        background: white;
+        border-radius: 32px;
+        box-shadow: var(--shadow-xl);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width: 1200px;
+        margin: 60px auto;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Header Gradient Bar */
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--gradient-primary);
+    }
+
+    /* Card Inner Content */
+    .card-content {
+        padding: 48px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
+        color: var(--primary);
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+        letter-spacing: 0.5px;
+    }
+
+    /* Main Heading */
+    .card h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 16px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
+        text-align: center;
+    }
+
+    /* Description Text */
+    .description {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--gray);
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 40px auto;
+    }
+
+    /* Form styling */
+    form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    /* Input Group */
+    .input-group {
+        position: relative;
+    }
+
+    /* Input field styling */
+    input, select {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        background: white;
+        font-family: inherit;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        transform: translateY(-2px);
+    }
+
+    input:hover, select:hover {
+        border-color: var(--secondary);
+    }
+
+    /* Placeholder styling */
+    input::placeholder {
+        color: #a0aec0;
+        transition: all 0.3s ease;
+    }
+
+    input:focus::placeholder {
+        opacity: 0.5;
+        transform: translateX(5px);
+    }
+
+    /* Input Icons */
+    .input-group {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        pointer-events: none;
+    }
+
+    input, select {
+        padding-left: 48px;
+    }
+
+    /* Button styling */
+    button {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 16px 32px;
+        color: white;
+        border-radius: 16px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        grid-column: 1 / -1;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    button:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    /* Result box styling */
+    .result {
+        margin-top: 40px;
+        padding: 32px;
+        border-radius: 24px;
+        animation: slideIn 0.5s ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .result-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .result h3 {
+        font-size: 1.75rem;
+        margin-bottom: 12px;
+        font-weight: 800;
+    }
+
+    .result p {
+        font-size: 1rem;
+        margin: 8px 0;
+    }
+
+    .probability-bar {
+        margin-top: 20px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        height: 8px;
+    }
+
+    .probability-fill {
+        height: 100%;
+        transition: width 0.6s ease;
+        border-radius: 10px;
+    }
+
+    .safe { 
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border-left: 6px solid #10b981;
+        box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
+    }
+
+    .fraud { 
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        color: #991b1b;
+        border-left: 6px solid #ef4444;
+        box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.2);
+        animation: shake 0.5s ease-out;
+    }
+
+    .suspicious { 
+        background: linear-gradient(135deg, #fed7aa 0%, #ffedd5 100%);
+        color: #92400e;
+        border-left: 6px solid #f59e0b;
+        box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.2);
+    }
+
+    /* Awareness & Advice Sections */
+    .awareness-box, .advice-box {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(4px);
+    }
+
+    .awareness-box {
+        border-left: 4px solid #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+    }
+
+    .advice-box {
+        border-left: 4px solid #10b981;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+    }
+
+    .awareness-box h4, .advice-box h4 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* FIX: Ensure text in advice boxes is always visible */
+    .awareness-box, .advice-box,
+    .awareness-box *,
+    .advice-box * {
+        color: #1f2937 !important;
+    }
+
+    .awareness-box ul, .advice-box ul {
+        margin-left: 20px;
+        line-height: 1.6;
+    }
+
+    .awareness-box li, .advice-box li {
+        margin: 8px 0;
+    }
+
+    .fraud-warning {
+        background: #ef4444;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .safe-tip {
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    /* Result icons */
+    .result-icon {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        font-size: 80px;
+        opacity: 0.15;
+        pointer-events: none;
+    }
+
+    /* Info Section */
+    .info-section {
+        margin-top: 40px;
+        padding: 24px;
+        background: #f8fafc;
+        border-radius: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .info-card {
+        text-align: center;
+        padding: 16px;
+    }
+
+    .info-icon {
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+
+    .info-title {
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+    }
+
+    .info-text {
+        font-size: 0.875rem;
+        color: var(--gray);
+    }
+
+    /* Decorative elements */
+    .card::after {
+        content: '🔮';
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        font-size: 80px;
+        opacity: 0.03;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover::after {
+        opacity: 0.06;
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .card {
+            margin: 20px;
+            border-radius: 24px;
+        }
+
+        .card-content {
+            padding: 32px 24px;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+
+        form {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        input, select {
+            padding: 12px 14px;
+            font-size: 13px;
+        }
+        
+        input, select {
+            padding-left: 42px;
+        }
+        
+        button {
+            padding: 14px 24px;
+            font-size: 14px;
+        }
+        
+        .result {
+            padding: 24px;
+        }
+
+        .result h3 {
+            font-size: 1.4rem;
+        }
+
+        .result-icon {
+            font-size: 60px;
+        }
+
+        .info-section {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        .awareness-box ul, .advice-box ul {
+            margin-left: 16px;
+        }
+    }
+
+    /* Loading state for button */
+    button.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    button.loading::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 2px solid white;
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* Validation styling */
+    input:invalid, select:invalid {
+        border-color: #f56565;
+    }
+
+    input:valid, select:valid {
+        border-color: #e2e8f0;
+    }
+
+    /* Focus visible for accessibility */
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        .card {
+            background: #1e293b;
+        }
+
+        .description {
+            color: #94a3b8;
+        }
+
+        input, select {
+            background: #334155;
+            border-color: #475569;
+            color: #f1f5f9;
+        }
+        
+        input::placeholder, select::placeholder {
+            color: #94a3b8;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+        }
+
+        .info-section {
+            background: #0f172a;
+        }
+
+        .info-title {
+            color: #f1f5f9;
+        }
+
+        .info-text {
+            color: #94a3b8;
+        }
+        
+        .awareness-box, .advice-box {
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        /* FIX: Dark mode text visibility in advice boxes */
+        .awareness-box, .advice-box,
+        .awareness-box *,
+        .advice-box * {
+            color: #f1f5f9 !important;
+        }
+    }
+
+    /* Print styles */
+    @media print {
+        .card::before,
+        .card::after,
+        button::before,
+        .result-icon,
+        .info-section {
+            display: none;
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+        }
+        
+        input, select {
+            border: 1px solid #ddd;
+        }
+        
+        .safe, .fraud, .suspicious {
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+        }
+    }
+</style>
+
+<div class="card">
+    <div class="card-content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="badge">🔮 REAL-TIME ANALYSIS</div>
+            <h2>Transaction Prediction</h2>
+            <p class="description">
+                Enter transaction details below to analyze and detect potential fraud in real-time
+            </p>
+        </div>
+
+        <form method="POST">
+            <div class="input-group">
+                <span class="input-icon">⏰</span>
+                <input name="step" placeholder="Step (Time)" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">💳</span>
+                <input name="type" placeholder="Type (TRANSFER/CASH_OUT/PAYMENT)" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">💰</span>
+                <input name="amount" placeholder="Amount" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">👤</span>
+                <input name="oldbalanceOrg" placeholder="Old Balance Orig" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">📈</span>
+                <input name="newbalanceOrig" placeholder="New Balance Orig" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">🏦</span>
+                <input name="oldbalanceDest" placeholder="Old Balance Dest" required>
+            </div>
+            <div class="input-group">
+                <span class="input-icon">📊</span>
+                <input name="newbalanceDest" placeholder="New Balance Dest" required>
+            </div>
+
+            <button type="submit">
+                <span>🔍</span> Analyze Transaction <span>→</span>
+            </button>
+        </form>
+
+        {% if result %}
+            <div class="result 
+                {% if result == 'SAFE' %}safe
+                {% elif result == 'FRAUD' %}fraud
+                {% else %}suspicious
+                {% endif %}">
+                
+                <div class="result-icon">
+                    {% if result == 'SAFE' %}✅
+                    {% elif result == 'FRAUD' %}⚠️
+                    {% else %}❓
+                    {% endif %}
+                </div>
+                
+                <div class="result-content">
+                    <h3>
+                        {% if result == 'SAFE' %}🎉 Transaction: SAFE
+                        {% elif result == 'FRAUD' %}🚨 Transaction: FRAUD
+                        {% else %}⚠️ Transaction: SUSPICIOUS
+                        {% endif %}
+                    </h3>
+                    <p>Fraud Probability: {{ probability }}%</p>
+                    
+                    <div class="probability-bar">
+                        <div class="probability-fill" style="width: {{ probability }}%; 
+                            background: {% if result == 'SAFE' %}#10b981{% elif result == 'FRAUD' %}#ef4444{% else %}#f59e0b{% endif %};">
+                        </div>
+                    </div>
+                    
+                    <!-- FRAUD AWARENESS SECTION -->
+                    {% if result == 'FRAUD' %}
+                    <div class="fraud-warning">
+                        ⚠️ URGENT: This transaction has been flagged as FRAUDULENT!
+                    </div>
+                    <div class="awareness-box">
+                        <h4>🚨 FRAUD AWARENESS & IMMEDIATE ACTIONS 🚨</h4>
+                        <ul>
+                            <li><strong>⚠️ DO NOT PROCEED</strong> with this transaction - It has been identified as potentially fraudulent.</li>
+                            <li><strong>🔒 Freeze the account</strong> immediately to prevent further unauthorized transactions.</li>
+                            <li><strong>📞 Contact the account holder</strong> via registered phone number to verify if they authorized this transaction.</li>
+                            <li><strong>🏦 Report to your bank's fraud department</strong> and file a formal complaint.</li>
+                            <li><strong>📝 Document all details</strong> including transaction ID, amount, timestamp, and involved parties.</li>
+                            <li><strong>🔐 Change passwords and enable 2-factor authentication</strong> on all associated accounts.</li>
+                            <li><strong>📧 Send an alert email</strong> to the customer and internal security team.</li>
+                            <li><strong>🌐 Report to cyber crime cell</strong> if the amount is significant.</li>
+                        </ul>
+                    </div>
+                    <div class="awareness-box" style="margin-top: 12px;">
+                        <h4>💡 How to Protect Yourself from Future Fraud</h4>
+                        <ul>
+                            <li>✅ Never share OTP, PIN, or passwords with anyone.</li>
+                            <li>✅ Verify transaction details before approving any payment.</li>
+                            <li>✅ Enable transaction alerts via SMS and email.</li>
+                            <li>✅ Use only trusted and secure networks for financial transactions.</li>
+                            <li>✅ Regularly review bank statements for unauthorized activities.</li>
+                            <li>✅ Keep your contact information updated with the bank.</li>
+                            <li>✅ Install anti-phishing and anti-malware software on devices.</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- SAFE TRANSACTION ADVICE SECTION -->
+                    {% if result == 'SAFE' %}
+                    <div class="safe-tip">
+                        ✅ GOOD NEWS: This transaction appears legitimate and safe!
+                    </div>
+                    <div class="advice-box">
+                        <h4>💡 FINANCIAL SAFETY ADVICE - Keep Your Account Secure</h4>
+                        <ul>
+                            <li><strong>🔐 Strong Passwords:</strong> Use unique, complex passwords for your banking accounts. Change them every 3 months.</li>
+                            <li><strong>📱 Enable 2-Factor Authentication (2FA):</strong> Add an extra layer of security to all financial apps.</li>
+                            <li><strong>👀 Monitor Account Activity:</strong> Review your transaction history weekly to spot unusual patterns early.</li>
+                            <li><strong>⚠️ Beware of Phishing:</strong> Never click on suspicious links in emails or SMS claiming to be from your bank.</li>
+                            <li><strong>📞 Verify Calls:</strong> If someone calls claiming to be from bank support, hang up and call official number.</li>
+                            <li><strong>💰 Set Transaction Limits:</strong> Configure daily and per-transaction limits for added safety.</li>
+                            <li><strong>🔒 Secure Wi-Fi:</strong> Avoid banking on public Wi-Fi; use VPN or mobile data for sensitive transactions.</li>
+                            <li><strong>📊 Keep Records:</strong> Save transaction receipts and statements for future reference.</li>
+                        </ul>
+                    </div>
+                    <div class="advice-box" style="margin-top: 12px;">
+                        <h4>📈 Smart Financial Tips</h4>
+                        <ul>
+                            <li>💰 <strong>Budgeting:</strong> Track your income and expenses regularly.</li>
+                            <li>💳 <strong>Credit Monitoring:</strong> Check your credit score annually for free.</li>
+                            <li>📅 <strong>Schedule Reviews:</strong> Set monthly reminders to review all financial accounts.</li>
+                            <li>🔔 <strong>Enable Alerts:</strong> Turn on push notifications for all transactions above a threshold.</li>
+                            <li>🏦 <strong>Use Secure Apps:</strong> Only use official banking apps from trusted stores.</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- SUSPICIOUS TRANSACTION ADVICE -->
+                    {% if result == 'SUSPICIOUS' %}
+                    <div class="awareness-box" style="border-left-color: #f59e0b;">
+                        <h4>⚠️ SUSPICIOUS TRANSACTION - VERIFICATION NEEDED</h4>
+                        <ul>
+                            <li><strong>🔍 Verify the transaction</strong> with the account holder before proceeding.</li>
+                            <li><strong>📞 Call the customer</strong> using their registered mobile number to confirm authenticity.</li>
+                            <li><strong>⏸️ Temporarily hold the transaction</strong> until proper verification is complete.</li>
+                            <li><strong>📝 Ask security questions</strong> to validate the identity of the requester.</li>
+                            <li><strong>🏦 Flag this account</strong> for additional monitoring for the next 48 hours.</li>
+                            <li><strong>📧 Send confirmation email</strong> to the registered email address before releasing funds.</li>
+                        </ul>
+                    </div>
+                    <div class="advice-box" style="margin-top: 12px;">
+                        <h4>💡 Prevention Tips for Future</h4>
+                        <ul>
+                            <li>✅ Always verify large or unusual transactions through multiple channels.</li>
+                            <li>✅ Keep your bank informed about upcoming large transactions.</li>
+                            <li>✅ Use transaction confirmation features like OTP or biometric verification.</li>
+                            <li>✅ Report any suspicious activity immediately to your bank's fraud department.</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Information Section -->
+        <div class="info-section">
+            <div class="info-card">
+                <div class="info-icon">🤖</div>
+                <div class="info-title">ML Model</div>
+                <div class="info-text">Powered by LightGBM with 99.9% accuracy</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">⚡</div>
+                <div class="info-title">Real-time</div>
+                <div class="info-text">Instant analysis with sub-second response</div>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🛡️</div>
+                <div class="info-title">Secure</div>
+                <div class="info-text">End-to-end encrypted transaction analysis</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
